@@ -1,0 +1,22 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.header-icon {
+  background-color: white;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+}
+
+.input-header {
+  height: 1.5rem;
+  width: 100%;
+  background: hsl(0deg 0% 100%);
+  box-shadow: 0 0 2em hsl(231deg 62% 94%);
+  padding: 0.5em;
+  border-radius: 20px;
+  color: hsl(0deg 0% 30%);
+  margin: 5px;
+}

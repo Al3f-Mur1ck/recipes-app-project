@@ -1,0 +1,51 @@
+.login-page {
+	user-select: none;
+	overflow-y: hidden;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+  background: hsl(218deg 50% 91%);
+	height: 100vh;
+}
+
+.input-login-page {
+		background: hsl(0deg 0% 100%);
+		box-shadow: 0 0 2em hsl(231deg 62% 94%);
+		padding: 1em;
+		display: flex;
+		flex-direction: column;
+		gap: 0.5em;
+		border-radius: 20px;
+		color: hsl(0deg 0% 30%);
+    margin: 5px;
+}
+
+.btn-login-page { 
+  cursor: pointer;
+  background: rgb(59, 82, 185);
+  box-shadow: 0 0 2em hsl(231deg 62% 94%);
+  padding: 1em;
+  gap: 0.5em;
+  border-radius: 20px;
+  color: rgb(255, 255, 255);
+  width: 208px;
+  margin: 5px;
+}
+
+.btn-login-page:disabled {
+  cursor: pointer;
+  background: rgb(126, 127, 133);
+  box-shadow: 0 0 2em hsl(231deg 62% 94%);
+  padding: 1em;
+  gap: 0.5em;
+  border-radius: 20px;
+  color: rgb(5, 5, 5);
+  width: 208px;
+  margin: 5px;
+
+}
+
+.pizza-icon{
+  margin-bottom: 60px;
+  margin-top: -100px;
+}

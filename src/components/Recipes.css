@@ -1,0 +1,37 @@
+.category-filter {
+    cursor: pointer;
+    background: rgb(106, 122, 192);
+    box-shadow: 0 0 2em hsl(231deg 62% 94%);
+    padding: 0.4em;
+    border-radius: 13px;
+    color: rgb(255, 255, 255);
+    margin: auto;
+    width: 65px
+}
+
+.card-image {
+  height: 250px;
+  width: 250px;
+}
+
+.recipe-cards{
+  margin-left: 65px;
+  display: flex;
+  flex-flow:column;
+}
+
+hr {
+  width: 200%;
+  color:black;
+  margin-left: -100px;
+}
+
+a {
+  color: black;
+text-decoration: none;
+}
+
+.details-page{
+  display: flex;
+  flex-flow: column;
+}

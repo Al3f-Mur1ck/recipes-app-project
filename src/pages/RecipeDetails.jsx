@@ -1,0 +1,202 @@
+import React, { useEffect, useContext } from 'react';
+import PropTypes from 'prop-types';
+import { useHistory } from 'react-router-dom';
+import { requestFoodDetails, requestDrinkDetails, requestAllFoods,
+  requestAllDrinks } from '../endPoints/requestAPI';
+import { Context } from '../context/Context';
+import RecipesDetailsIcons from '../components/RecipesDetailsIcons';
+import ButtonStartRecipe from '../components/ButtonStartRecipe';
+
+function RecipeDetails(props) {
+  const history = useHistory();
+  const {
+    location: { pathname },
+  } = history;
+  const { match: { params: { id } } } = props;
+  const { setDetail, details, setIngredient, ingredient, setResponseDrink,
+    setMeasure, measure, setResponseFood, responseFood,
+    responseDrink } = useContext(Context);
+  const six = 6;
+
+  useEffect(() => {
+    const Details = async () => {
+      if (pathname.includes('/foods')) {
+        const meal = await requestFoodDetails(id);
+        // console.log(meal);
+        setDetail(meal);
+      }
+      if (pathname.includes('/drinks')) {
+        const drink = await requestDrinkDetails(id);
+        // console.log(drink);
+        setDetail(drink);
+      }
+    };
+    Details();
+  }, []);
+
+  useEffect(() => {
+    if (details && pathname.includes('foods')) {
+      const ingredients = Object.entries(details?.meals[0])
+        .filter((item) => item[0].includes('strIngredient'));
+      const secondElementIng = ingredients.map((item) => item[1]);
+      setIngredient(secondElementIng);
+      const measures = Object.entries(details?.meals[0])
+        .filter((item) => item[0].includes('strMeasure'));
+      const secondElementMea = measures.map((item) => item[1]);
+      setMeasure(secondElementMea);
+    }
+    if (details && pathname.includes('/drinks')) {
+      const ingredients = Object.entries(details?.drinks[0])
+        .filter((item) => item[0].includes('strIngredient'));
+      const secondElementIng = ingredients.map((item) => item[1]);
+      setIngredient(secondElementIng);
+      const measures = Object.entries(details?.drinks[0])
+        .filter((item) => item[0].includes('strMeasure'));
+      const secondElementMea = measures.map((item) => item[1]);
+      setMeasure(secondElementMea);
+    }
+  }, [details, setIngredient, setMeasure, pathname]);
+
+  useEffect(() => {
+    const ReqAPI = async () => {
+      const responseMeal = await requestAllFoods();
+      setResponseFood(responseMeal);
+      const drinkResponse = await requestAllDrinks();
+      setResponseDrink(drinkResponse);
+    };
+    ReqAPI();
+  }, [setResponseDrink, setResponseFood]);
+
+  return (
+    <>
+      {pathname.includes('foods')
+        && (
+          <div className="details-page">
+            <h2>Food Details</h2>
+            <img
+              className="recipe-img"
+              src={ details?.meals[0].strMealThumb }
+              alt="detail"
+              data-testid="recipe-photo"
+            />
+            <p data-testid="recipe-title">{ details?.meals[0].strMeal }</p>
+            <p data-testid="recipe-category">
+              { details?.meals[0].strCategory }
+            </p>
+            <RecipesDetailsIcons />
+            <p data-testid="instructions">
+              { details?.meals[0].strInstructions }
+            </p>
+            <object width="425" height="350">
+              <param name="movie" value={ details?.meals[0].strYoutube } />
+              <embed
+                src={ details?.meals[0].strYoutube }
+                type="video/mp4"
+                data-testid="video"
+                width="425"
+                height="350"
+              />
+            </object>
+            <ul>
+              {measure && measure.filter((n) => n).map((item, index) => (
+                <li data-testid={ `${index}-ingredient-name-and-measure` } key={ index }>
+                  { item }
+                </li>
+              ))}
+              {ingredient && ingredient.filter((n) => n).map((item, index) => (
+                <li data-testid={ `${index}-ingredient-name-and-measure` } key={ item }>
+                  { item }
+                </li>
+              ))}
+            </ul>
+            <div className="recomendation">
+              {responseDrink && responseDrink.drinks.sort().slice(0, six)
+                .map((item, index) => (
+                  <a
+                    data-testid={ `${index}-recomendation-card` }
+                    href={ `/drinks/${item.idDrink}` }
+                    key={ item.idDrink }
+                  >
+                    <img
+                      className="recomendation-img"
+                      src={ item.strDrinkThumb }
+                      alt={ item.strDrink }
+                    />
+                    <p data-testid={ `${index}-recomendation-title` }>
+                      { item.strDrink }
+                    </p>
+                  </a>
+                ))}
+            </div>
+            <ButtonStartRecipe id={ id } />
+          </div>)}
+      {pathname.includes('drinks')
+    && (
+      <div className="details-page">
+        <img
+          src={ details?.drinks[0].strDrinkThumb }
+          alt="detail"
+          data-testid="recipe-photo"
+        />
+        <p data-testid="recipe-title">{ details?.drinks[0].strDrink }</p>
+        <p data-testid="recipe-category">
+          { details?.drinks[0].strAlcoholic }
+        </p>
+        <RecipesDetailsIcons />
+        <p data-testid="instructions">
+          { details?.drinks[0].strInstructions }
+        </p>
+        <ul>
+          {measure && measure.filter((n) => n).map((item, index) => (
+            <li
+              name="drinks"
+              data-testid={ `${index}-ingredient-name-and-measure` }
+              key={ index }
+            >
+              { item }
+            </li>
+          ))}
+          {ingredient && ingredient.filter((n) => n).map((item, index) => (
+            <li
+              data-testid={ `${index}-ingredient-name-and-measure` }
+              name="drinks"
+              key={ item }
+            >
+              { item }
+            </li>
+          ))}
+        </ul>
+        <div className="recomendation">
+          {responseFood && responseFood.meals.sort().slice(0, six)
+            .map((item, index) => (
+              <a
+                data-testid={ `${index}-recomendation-card` }
+                href={ `/foods/${item.idMeal}` }
+                key={ item.idMeal }
+              >
+                <img
+                  src={ item.strMealThumb }
+                  alt={ item.strMeal }
+                  className="recomendation-img"
+                />
+                <p data-testid={ `${index}-recomendation-title` }>
+                  { item.strMeal }
+                </p>
+              </a>
+            ))}
+        </div>
+        <ButtonStartRecipe id={ id } />
+      </div>)}
+    </>
+  );
+}
+
+RecipeDetails.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.string,
+    }),
+  }).isRequired,
+};
+
+export default RecipeDetails;
